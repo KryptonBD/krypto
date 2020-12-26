@@ -1,3 +1,49 @@
 page-home {
+    .coin{
+        .col{
+            padding: 0;
+        }
 
+        &__name{
+            text-transform: uppercase;
+            color: #466581;
+            margin: 13px 0 0 10px;
+            display: block;
+        }
+
+        &__refresh{
+            float: right;
+        }
+        &-details{
+            color: white;
+            background-color: #102D49;
+            &__label{
+                text-transform: uppercase;
+                color: #327EB1;
+                display: block;
+                font-size: .7em;
+            }
+
+            &__answer{
+                font-size: .7em;
+            }
+        }
+    }
+
+    .end{
+        text-align: right;
+    }
+    .size{
+        font-size: 28px;
+        padding: 10px;
+    }
+
+    .list-md ion-item-options .button{
+        height: 45px;
+        background-color: #19232C;
+
+    }
+    .list-md ion-item-options{
+        border-bottom: 0;
+    }
 }

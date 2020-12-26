@@ -1,6 +1,5 @@
 // http://ionicframework.com/docs/theming/
 
-
 // App Global Sass
 // --------------------------------------------------
 // Put style rules here that you want to apply globally. These
@@ -14,3 +13,29 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap");
+
+ion-content {
+  font-family: "Source Sans Pro";
+}
+
+.bar-button-default-md,
+.bar-button-clear-md-default,
+.bar-button-md-default {
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+.bar-button-md[icon-only] {
+  padding: 10px;
+}
+
+.scroll-content {
+  padding: 0 !important;
+}
+
+ion-item, .coinbtn{
+    background: #1e4871;
+    margin-bottom: 0;
+    border-bottom: 1px solid #19232c;
+    color: #c1e6ff;
+}
