@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, LoadingController } from 'ionic-angular';
 import { DataProvider } from '../../providers/data/data';
 import { Storage } from '@ionic/storage';
 import { Chart } from 'chart.js';
+import { SearchPage } from '../search/search';
+
 
 @Component({
   selector: 'page-home',
@@ -18,7 +20,8 @@ export class HomePage {
   constructor(
     public navCtrl: NavController,
     private _data: DataProvider,
-    private storage: Storage) {
+    private storage: Storage,
+    public loading: LoadingController) {
 
   }
 
@@ -31,34 +34,44 @@ export class HomePage {
   }
 
   refreshCoins() {
-    this.storage.get("likedCoins").then(res => {
-      //If value is not set
-      if (!res) {
-        this.likedCoins.push('BTC', 'ETH', 'LTC');
-        this.storage.set("likedCoins", this.likedCoins);
-        this.getCoins();
-      } else {
-        this.likedCoins = res;
-        this.getCoins();
-      }
+    let loader = this.loading.create({
+      content: 'Refreshing...',
+      spinner: 'bubbles'
+    });
+
+    loader.present().then(() => {
+      this.storage.get("likedCoins").then(res => {
+        //If value is not set
+        if (!res) {
+          this.likedCoins.push('BTC', 'ETH', 'LTC');
+          this.storage.set("likedCoins", this.likedCoins);
+          this.getCoins(loader);
+        } else {
+          this.likedCoins = res;
+          this.getCoins(loader);
+        }
+      })
     })
+
+
   }
 
-  getCoins() {
+  getCoins(loader) {
     this._data.getCoins(this.likedCoins).subscribe(result => {
-      console.log(result)
+      //console.log(result)
       this.coins = result;
+      loader.dismiss();
     })
   }
 
   showSearch() {
-
+    this.navCtrl.push(SearchPage);
   }
 
   coinDetails(coin, index) {
     if (this.detailToggle[index]) {
       this.detailToggle[index] = false;
-    } 
+    }
     else {
       this.detailToggle.fill(false);
       this._data.getCoin(coin).subscribe(res => {
@@ -67,8 +80,8 @@ export class HomePage {
         this.detailToggle[index] = true;
 
         this._data.getChart(coin).subscribe(res => {
-          // console.log(res);
-          let coinHistory = res['Data'].map((a) => (a.volumeto));
+          //console.log(res);
+          let coinHistory = res['Data'].map((a) => (a.volumetotal));
 
           setTimeout(() => {
             this.chart[index] = new Chart('canvas' + index, {
@@ -124,14 +137,14 @@ export class HomePage {
     this.detailToggle[index] = false;
   }
 
-  removeCoin(coin){
+  removeCoin(coin) {
     this.detailToggle.fill(false);
-    this.likedCoins = this.likedCoins.filter(item =>{
+    this.likedCoins = this.likedCoins.filter(item => {
       return item !== coin;
     });
 
     this.storage.set("likedCoins", this.likedCoins);
-    setTimeout(()=>{
+    setTimeout(() => {
       this.refreshCoins();
     }, 300);
   }
